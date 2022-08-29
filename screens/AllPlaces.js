@@ -1,11 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import PlacesList from '../components/PlacesList';
 
 const AllPlaces = () => {
-  return (
-    <View>
-      <Text>AllPlaces</Text>
-    </View>
-  );
+  return <PlacesList />;
 };
 
 export default AllPlaces;
