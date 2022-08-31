@@ -1,24 +1,41 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ScrollView, Image, View, Text, StyleSheet } from 'react-native';
 
 import OutlinedButton from '../components/UI/OutlinedButton';
 import { Colors } from '../constants/colors';
+import { fetchPlaceDetails } from '../util/database';
 
-const PlaceDetails = ({ route }) => {
+const PlaceDetails = ({ route, navigation }) => {
+  const [fetchedPlace, setFetchedPlace] = useState();
+
   const showOnMapHandler = () => {};
 
   const selectedPlaceId = route.params.placeId;
 
   useEffect(() => {
-    // use selectedPlaceId to fetch data for a single place
+    (async () => {
+      const place = await fetchPlaceDetails(selectedPlaceId);
+      setFetchedPlace(place);
+      navigation.setOptions({
+        title: place.title,
+      });
+    })();
   }, [selectedPlaceId]);
+
+  if (!fetchedPlace) {
+    return (
+      <View style={styles.fallback}>
+        <Text>Loading place data...</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView>
-      <Image style={styles.image} />
+      <Image style={styles.image} source={{ uri: fetchedPlace.imageUri }} />
       <View style={styles.locationContainer}>
         <View style={styles.addressContainer}>
-          <Text style={styles.address}></Text>
+          <Text style={styles.address}>{fetchedPlace.address}</Text>
         </View>
         <OutlinedButton icon="map" onPress={showOnMapHandler}>
           View on Map
