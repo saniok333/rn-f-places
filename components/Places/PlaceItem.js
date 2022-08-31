@@ -6,7 +6,11 @@ const PlaceItem = ({ place, onSelect }) => {
   const { imageUri, title, address } = place;
   return (
     <Pressable
-      onPress={onSelect}
+      onPress={() => {
+        onSelect(place.id);
+      }}
+      // alternative
+      // onPress={onSelect.bind(this, place.id)}
       style={({ pressed }) => [styles.item, pressed && styles.pressed]}
     >
       <Image style={styles.image} source={imageUri} />
